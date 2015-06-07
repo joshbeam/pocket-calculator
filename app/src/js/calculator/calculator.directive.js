@@ -12,7 +12,8 @@
 			restrict: 'E',
 			templateUrl: 'templates/calculator.html',
 			link: link
-		};
+		},
+		error = 'ERROR';
 
 		return d;
 
@@ -28,9 +29,14 @@
 		/////////////////////
 
 		function solve($el) {
-			this.html(Calculator.solve(Calculator.equation));
+			try {
+				this.html(Calculator.solve(Calculator.equation));
+				$el.data('solved', true);
+			} catch(e) {
+				this.html(error);
+			}
+
 			Calculator.clear();
-			$el.data('solved', true);
 		}
 
 		function clear() {
@@ -41,17 +47,19 @@
 		function store($el, e) {
 			var operand = $(e.target).html();
 
-			// initially clear the display
-			if(this.html() === '0' || !!$el.data('solved')) {
-				this.html('');
-				$el.data('solved', false);
+			if(this.html().length !== 6) {
+				// initially clear the display
+				if(this.html() === '0' || !!$el.data('solved') || this.html() === error) {
+					this.html('');
+					$el.data('solved', false);
+				}
+
+				// store this part of the equation
+				Calculator.store(+operand);
+
+				// display this part of the equation
+				this.html(this.html() + operand);
 			}
-
-			// store this part of the equation
-			Calculator.store(+operand);
-
-			// display this part of the equation
-			this.html(this.html() + operand);
 		}
 
 		function operate(e) {

@@ -1,3 +1,4 @@
+// TODO: show error in display if there's an error
 ;(function(app, m) {
 
 	'use strict';

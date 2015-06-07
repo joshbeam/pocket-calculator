@@ -11,10 +11,11 @@
   
   .calculator-display {
     color: #fff;
-    padding-right: 10px;
+    padding: 0 10px;
     font-size: 75px;
     height: 20%;
     text-align: right;
+    overflow-x: scroll;
   }
   
   .calculator-keypad {
