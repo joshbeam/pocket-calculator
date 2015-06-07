@@ -20,4 +20,4 @@ gulp
 
 ## Requirements
 
-- Any modern browser or IE10+ (works best in IE11+)
+- Any modern browser or IE10+ (if using IE, prefer 11+)
