@@ -24,7 +24,6 @@
 		//////////////////
 
 		function solve() {
-			console.log(equation);
 			return math.eval(equation.join(''));
 		}
 

@@ -41,8 +41,6 @@
 		function store($el, e) {
 			var operand = $(e.target).html();
 
-			console.log($el);
-
 			// initially clear the display
 			if(this.html() === '0' || !!$el.data('solved')) {
 				this.html('');
