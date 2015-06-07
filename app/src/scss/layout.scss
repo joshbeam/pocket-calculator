@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+  cursor: default;
+  font-family: 'Helvetica', sans-serif;
+  font-weight: 100;
+  font-size: 16px;
+}
+
+body,
+html {
+  height: 100%;
+}
+
+body {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
