@@ -60,7 +60,10 @@
 			var operator = $(e.target).attr('operator');
 
 			if(operator === 'negate') {
-				console.log(Calculator.get()[Calculator.get().length - 1]);
+				Calculator.negate(function negationSuccess() {
+					this.html( (this.html().charAt(0) === '-' ? this.html().substr(1) : '-' + this.html()) );
+				}.bind(this));
+				
 			} else {
 				this.html('0');
 				Calculator.store(operator);

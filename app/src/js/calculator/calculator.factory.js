@@ -8,14 +8,15 @@
 
 	function Calculator() {
 		var equation = [],
-			operators = ['+','-','/','*'],
+			operators = ['+', '-', '/', '*', '%'],
 			answer;
 
 		var factory = {
 			solve: solve,
 			store: store,
 			clear: clear,
-			get: get
+			get: get,
+			negate: negate
 		};
 
 		return factory;
@@ -58,6 +59,30 @@
 			});
 
 			return bool;
+		}
+
+		function negate(callback) {
+			var last = equation[equation.length - 2],
+				success = false;
+
+			if(equation[equation.length - 1] !== '0') {
+				if(last === '-') {
+					equation[equation.length - 2] = '+';
+					success = true;
+				} else if(last === '+') {
+					equation[equation.length - 2] = '-';
+					success = true;
+				} else {
+					if(isOperator(last)) {
+						equation.splice(equation.length - 1, 0, '-');
+						success = true;
+					}
+				}
+			}
+
+			if(success === true) {
+				return callback();
+			}
 		}
 	}
 
