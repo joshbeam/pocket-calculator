@@ -7,13 +7,15 @@
 	Calculator.$inject = [];
 
 	function Calculator() {
-		var equation = '1+1',
+		var equation = [],
+			operators = ['+','-','/','*'],
 			answer;
 
 		var factory = {
 			solve: solve,
 			store: store,
-			clear: clear
+			clear: clear,
+			get: get
 		};
 
 		return factory;
@@ -21,15 +23,41 @@
 		//////////////////
 
 		function solve() {
-			return math.eval(equation);
+			console.log(equation);
+			return math.eval(equation.join(''));
 		}
 
 		function store(expression) {
-			equation += expression;
+			if(typeof expression === 'number' && !isOperator(equation[equation.length - 1])) {
+				if(equation.length === 0) {
+					equation[0] = ''+expression;
+				} else {
+					equation[equation.length-1] += ''+expression;
+				}
+			} else {
+				equation.push(''+expression);
+			}
 		}
 
 		function clear() {
-			equation = null;
+			equation = [];
+		}
+
+		function get() {
+			return equation;
+		}
+
+		function isOperator(test) {
+			var bool = false;
+
+			operators.forEach(function(op) {
+				if(op === test) {
+					bool = true;
+					return;
+				}
+			});
+
+			return bool;
 		}
 	}
 
