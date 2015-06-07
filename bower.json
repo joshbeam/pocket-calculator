@@ -1,0 +1,20 @@
+{
+  "name": "pocket-calculator",
+  "version": "0.0.1",
+  "homepage": "https://github.com/joshbeam/pocket-calculator",
+  "authors": [
+    "Josh Beam <joshua.a.beam@gmail.com>"
+  ],
+  "description": "Pocket calculator",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angularjs": "~1.4.0"
+  }
+}
