@@ -15,6 +15,8 @@ gulp.task('sass', function() {
 
 gulp.task('js', function() {
 	return gulp.src([
+			'bower_components/jquery/dist/jquery.min.js',
+			'bower_components/mathjs/dist/math.min.js',
 			'bower_components/angularjs/angular.min.js',
 			'app/src/js/calculator/pocket-calculator.js',
 			'app/src/js/**/*.js'
