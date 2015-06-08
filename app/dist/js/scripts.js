@@ -420,7 +420,9 @@ c){return e.$isEmpty(c)||c.length>=f}}}}};N.angular.bootstrap?console.log("WARNI
 	}
 
 })(angular.module('pocketCalculator'));
-// TODO: show error in display if there's an error
+// test in IE
+// solve on enter
+// negative decimals
 ;(function(app, m) {
 
 	'use strict';
