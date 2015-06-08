@@ -350,7 +350,7 @@ c){return e.$isEmpty(c)||c.length>=f}}}}};N.angular.bootstrap?console.log("WARNI
 			templateUrl: '/templates/calculator.html',
 			link: link
 		},
-		error = 'ERROR';
+			errorMessage = 'ERROR';
 
 		return d;
 
@@ -358,7 +358,6 @@ c){return e.$isEmpty(c)||c.length>=f}}}}};N.angular.bootstrap?console.log("WARNI
 			var $display = $el.find('[display]');
 
 			$el.find('*').each(addTabIndex);
-
 			$el.find('[solve]').on('click', solve.bind($display, $el));
 			$el.find('[clear]').on('click', clear.bind($display));
 			$el.find('[number]').add('[point]').on('click', store.bind($display, $el));
@@ -367,61 +366,69 @@ c){return e.$isEmpty(c)||c.length>=f}}}}};N.angular.bootstrap?console.log("WARNI
 
 		/////////////////////
 
+		// make everything "clickable"
 		function addTabIndex(i, $div) {
 			$($div).attr('tabindex', 0)
 		}
 
 		function solve($el) {
-			try {
-				this.html(Calculator.solve());
-				$el.data('solved', true);
-			} catch(e) {
-				this.html(error);
-			}
-
-			Calculator.clear();
+			Calculator.solve(solveSuccess.bind(this), solveError.bind(this));
 		}
 
+		// show the result
+		function solveSuccess(solution) {
+			display.call(this, solution);
+		}
+
+		// show 'ERROR'
+		function solveError(error) {
+			console.log(error);
+			this.html(errorMessage);
+		}
+
+		// clear the display
 		function clear() {
-			this.html('0');
-			Calculator.clear();
+			Calculator.clear(display.bind(this, 0));
 		}
 
+		// stores operands and operators in memory
 		function store($el, e) {
 			var operand = $(e.target).html();
 
+			// don't allow display overflow when inputting operands
 			if(this.html().length !== 6) {
 				// initially clear the display
-				if(this.html() === '0' || $el.data('solved') === true || this.html() === error) {
-					this.html('');
-					$el.data('solved', false);
+				if(Calculator.solved() === true || this.html() === '0' || this.html() === errorMessage) {
+					display.call(this, '');
 				}
 
-				// store this part of the equation
-				Calculator.store(operand);
-
-				// display this part of the equation
-				this.html(this.html() + operand);
+				// store this part of the equation and display the operand
+				Calculator.store(operand, display.bind(this, this.html() + operand));
 			}
 		}
 
 		function operate($el, e) {
 			var operator = $(e.target).attr('operator');
 
-			if($el.data('solved') === true) {
+			// allow carry over from the previous solution
+			if(Calculator.solved() === true && this.html() !== '0') {
 				Calculator.store(Calculator.getLastSolution());
-				$el.data('solved', false);
 			}
 
+			// allow +/- to negate the current operand
 			if(operator === 'negate') {
 				Calculator.negate(function negationSuccess() {
 					this.html( (this.html().charAt(0) === '-' ? this.html().substr(1) : '-' + this.html()) );
 				}.bind(this));
-				
 			} else {
-				this.html('0');
-				Calculator.store(operator);
+				// store the operator in memory
+				Calculator.store(operator, display.bind(this, 0));
 			}
+		}
+
+		// change the HTML content of the display
+		function display(content) {
+			this.html(content);
 		}
 	}
 
@@ -437,11 +444,13 @@ c){return e.$isEmpty(c)||c.length>=f}}}}};N.angular.bootstrap?console.log("WARNI
 
 	function Calculator() {
 		var equation = [],
-				lastSolution,
-				operators = ['+', '-', '/', '*', '%'];
+			lastSolution,
+			operators = ['+', '-', '/', '*', '%'],
+			isSolved = true;
 
 		var factory = {
 			solve: solve,
+			solved: solved,
 			store: store,
 			clear: clear,
 			get: get,
@@ -456,12 +465,24 @@ c){return e.$isEmpty(c)||c.length>=f}}}}};N.angular.bootstrap?console.log("WARNI
 		/**
 		 *	Evaluates the equation by joining the elements in the equation array
 		 */
-		function solve() {
+		function solve(onSuccess, onError) {
 			try {
 				lastSolution = m.eval(equation.join(''));
-				return lastSolution;
+				this.solved(true);
+
+				onSuccess.call(this, lastSolution);
 			} catch(e) {
-				return e;
+				onError.call(this, e);
+			}
+
+			this.clear();
+		}
+
+		function solved(bool) {
+			if(typeof bool !== 'undefined') {
+				isSolved = bool;
+			} else {
+				return isSolved;
 			}
 		}
 
@@ -469,19 +490,23 @@ c){return e.$isEmpty(c)||c.length>=f}}}}};N.angular.bootstrap?console.log("WARNI
 		 *	Stores each expression of the equation into the "equation" array.
 		 *	Operands are individual items, and operators are individual items.
 		 */
-		function store(_expression) {
-			var expression;
+		function store(expression, callback) {
+			var isOperand = (typeof +expression === 'number' || expression === '.')
+							&& !isOperator(expression)
+							&& !isOperator(equation[equation.length - 1]);
 
-			// typecast the expression to a number (only if it's supposed to be a number) for checking it later
-			if(_expression !== '.' && !isOperator(_expression)) {
-				expression = +_expression;
-			} else {
-				expression = _expression;
+			if(expression === '0' && equation.length === 0) {
+				this.clear();
+				return;
+			}
+
+			if(this.solved()) {
+				this.solved(false);
 			}
 
 			// push any regular or decimal number as its own element into the array
 			// e.g. '9999' should be one element, and '99.99' should be one element
-			if(typeof expression === 'number' && !isOperator(equation[equation.length - 1]) || expression === '.') {
+			if(isOperand) {
 				if(equation.length === 0) {
 					equation[0] = ''+expression;
 				} else {
@@ -492,13 +517,21 @@ c){return e.$isEmpty(c)||c.length>=f}}}}};N.angular.bootstrap?console.log("WARNI
 			} else {
 				equation.push(''+expression);
 			}
+			
+			if(typeof callback !== 'undefined') {
+				return callback.call(this, equation);
+			}
 		}
 
 		/**
 		 *	Resets the equation array
 		 */
-		function clear() {
+		function clear(callback) {
 			equation = [];
+
+			if(typeof callback !== 'undefined') {
+				return callback();
+			}
 		}
 
 		function get() {
@@ -506,6 +539,8 @@ c){return e.$isEmpty(c)||c.length>=f}}}}};N.angular.bootstrap?console.log("WARNI
 		}
 
 		function getLastSolution() {
+			this.solved(false);
+
 			return lastSolution;
 		}
 
@@ -532,7 +567,10 @@ c){return e.$isEmpty(c)||c.length>=f}}}}};N.angular.bootstrap?console.log("WARNI
 			var last = equation[equation.length - 2],
 				success = false;
 
-			if(equation[equation.length - 1] !== '0') {
+			if(equation.length === 1 && equation[0] !== '0') {
+				equation.unshift('-');
+				success = true;
+			} else if(equation[equation.length - 1] !== '0') {
 				if(last === '-') {
 					equation[equation.length - 2] = '+';
 					success = true;

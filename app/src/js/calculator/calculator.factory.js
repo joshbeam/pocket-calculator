@@ -9,11 +9,13 @@
 
 	function Calculator() {
 		var equation = [],
-				lastSolution,
-				operators = ['+', '-', '/', '*', '%'];
+			lastSolution,
+			operators = ['+', '-', '/', '*', '%'],
+			isSolved = true;
 
 		var factory = {
 			solve: solve,
+			solved: solved,
 			store: store,
 			clear: clear,
 			get: get,
@@ -28,12 +30,24 @@
 		/**
 		 *	Evaluates the equation by joining the elements in the equation array
 		 */
-		function solve() {
+		function solve(onSuccess, onError) {
 			try {
 				lastSolution = m.eval(equation.join(''));
-				return lastSolution;
+				this.solved(true);
+
+				onSuccess.call(this, lastSolution);
 			} catch(e) {
-				return e;
+				onError.call(this, e);
+			}
+
+			this.clear();
+		}
+
+		function solved(bool) {
+			if(typeof bool !== 'undefined') {
+				isSolved = bool;
+			} else {
+				return isSolved;
 			}
 		}
 
@@ -41,19 +55,23 @@
 		 *	Stores each expression of the equation into the "equation" array.
 		 *	Operands are individual items, and operators are individual items.
 		 */
-		function store(_expression) {
-			var expression;
+		function store(expression, callback) {
+			var isOperand = (typeof +expression === 'number' || expression === '.')
+							&& !isOperator(expression)
+							&& !isOperator(equation[equation.length - 1]);
 
-			// typecast the expression to a number (only if it's supposed to be a number) for checking it later
-			if(_expression !== '.' && !isOperator(_expression)) {
-				expression = +_expression;
-			} else {
-				expression = _expression;
+			if(expression === '0' && equation.length === 0) {
+				this.clear();
+				return;
+			}
+
+			if(this.solved()) {
+				this.solved(false);
 			}
 
 			// push any regular or decimal number as its own element into the array
 			// e.g. '9999' should be one element, and '99.99' should be one element
-			if(typeof expression === 'number' && !isOperator(equation[equation.length - 1]) || expression === '.') {
+			if(isOperand) {
 				if(equation.length === 0) {
 					equation[0] = ''+expression;
 				} else {
@@ -64,13 +82,21 @@
 			} else {
 				equation.push(''+expression);
 			}
+			
+			if(typeof callback !== 'undefined') {
+				return callback.call(this, equation);
+			}
 		}
 
 		/**
 		 *	Resets the equation array
 		 */
-		function clear() {
+		function clear(callback) {
 			equation = [];
+
+			if(typeof callback !== 'undefined') {
+				return callback();
+			}
 		}
 
 		function get() {
@@ -78,6 +104,8 @@
 		}
 
 		function getLastSolution() {
+			this.solved(false);
+
 			return lastSolution;
 		}
 
@@ -104,7 +132,10 @@
 			var last = equation[equation.length - 2],
 				success = false;
 
-			if(equation[equation.length - 1] !== '0') {
+			if(equation.length === 1 && equation[0] !== '0') {
+				equation.unshift('-');
+				success = true;
+			} else if(equation[equation.length - 1] !== '0') {
 				if(last === '-') {
 					equation[equation.length - 2] = '+';
 					success = true;
