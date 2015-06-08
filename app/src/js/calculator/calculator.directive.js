@@ -20,6 +20,8 @@
 		function link(scope, $el, attrs) {
 			var $display = $el.find('[display]');
 
+			$el.find('*').each(addTabIndex);
+
 			$el.find('[solve]').on('click', solve.bind($display, $el));
 			$el.find('[clear]').on('click', clear.bind($display));
 			$el.find('[number]').add('[point]').on('click', store.bind($display, $el));
@@ -27,6 +29,10 @@
 		}
 
 		/////////////////////
+
+		function addTabIndex(i, $div) {
+			$($div).attr('tabindex', 0)
+		}
 
 		function solve($el) {
 			try {

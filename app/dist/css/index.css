@@ -7,6 +7,7 @@
 
 body,
 html {
+  background: #b4c3d6;
   height: 100%; }
 
 body {
@@ -24,10 +25,9 @@ body {
           justify-content: center; }
 
 .calculator {
-  background: -webkit-radial-gradient(#aaa, #555);
-  background: radial-gradient(#aaa, #555);
+  background: transparent;
   border-radius: 5px;
-  box-shadow: 0 0 80px #bbb;
+  box-shadow: 0 0 30px #55749c;
   height: 400px;
   overflow: hidden;
   width: 300px; }
@@ -91,4 +91,4 @@ body {
                 flex: 1 0 50%; }
       .calculator .calculator-keypad .key:focus,
       .calculator .calculator-keypad .key:active {
-        background: #e4e4e4; }
+        background: #e9e9e9; }

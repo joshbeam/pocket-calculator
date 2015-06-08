@@ -1,5 +1,3 @@
-// test in IE
-// solve on enter
 // negative decimals
 ;(function(app, m) {
 
