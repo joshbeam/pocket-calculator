@@ -25,9 +25,10 @@ body {
           justify-content: center; }
 
 .calculator {
-  background: transparent;
+  background: -webkit-radial-gradient(rgba(255, 255, 255, 0.7) 10%, transparent);
+  background: radial-gradient(rgba(255, 255, 255, 0.7) 10%, transparent);
   border-radius: 5px;
-  box-shadow: 0 0 30px #55749c;
+  box-shadow: 0 0 80px #839bbb;
   height: 400px;
   overflow: hidden;
   width: 300px; }
