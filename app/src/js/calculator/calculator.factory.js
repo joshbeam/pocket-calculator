@@ -36,9 +36,13 @@
 				lastSolution = parseFloat( +(m.eval(equation.join('')).toPrecision(12)) );
 				this.solved(true);
 
-				onSuccess.call(this, lastSolution);
+				if(typeof onSuccess !== 'undefined') {
+					onSuccess.call(this, lastSolution);
+				}
 			} catch(e) {
-				onError.call(this, e);
+				if(typeof onError !== 'undefined') {
+					onError.call(this, e);
+				}
 			}
 
 			this.clear();
@@ -156,7 +160,7 @@
 
 			// To negate an operand, you must click the operand, and then the +/- sign.
 			// If it wasn't in that order, then the callback won't be called.
-			if(success === true) {
+			if(success === true && typeof callback !== 'undefined') {
 				return callback();
 			}
 		}
