@@ -4,7 +4,7 @@ This example application mimicks a basic-function calculator. It uses <a href="h
 
 ## Requirements
 
-- Modern browser (works on Chrome 43+, Firefox 38+, Safari 7.1.2+)
+- Modern browser (works on Chrome 43+, Firefox 38+, Safari 7.1.2+, IE10+)
 - Node.js, Bower
 
 ## Install
