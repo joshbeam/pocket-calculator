@@ -2,11 +2,13 @@ var express = require('express'),
 	app = express(),
 	port = process.env.PORT || 5000;
 
-app.use(express.static(__dirname + '/app/dist'));
-app.use(express.static(__dirname + '/app/templates'));
+process.env.PWD = process.cwd();
+
+app.use(express.static(process.env.PWD + '/app/dist'));
+app.use(express.static(process.env.PWD + '/app/templates'));
 
 app.get('/', function(req, res) {
-	res.sendFile(__dirname + '/app/index.html');
+	res.sendFile(process.env.PWD + '/app/index.html');
 });
 
 app.listen(port, function() {
