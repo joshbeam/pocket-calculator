@@ -1,4 +1,5 @@
-// TODO: show error in display if there's an error
+// test in IE
+// solve on enter
 ;(function(app, m) {
 
 	'use strict';
