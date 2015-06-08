@@ -9,8 +9,7 @@
 
 	function Calculator() {
 		var equation = [],
-			operators = ['+', '-', '/', '*', '%'],
-			answer;
+			operators = ['+', '-', '/', '*', '%'];
 
 		var factory = {
 			solve: solve,
@@ -24,22 +23,45 @@
 
 		//////////////////
 
+		/**
+		 *	Evaluates the equation by joining the elements in the equation array
+		 */
 		function solve() {
-			return math.eval(equation.join(''));
+			return m.eval(equation.join(''));
 		}
 
-		function store(expression) {
-			if(typeof expression === 'number' && !isOperator(equation[equation.length - 1])) {
+		/**
+		 *	Stores each expression of the equation into the "equation" array.
+		 *	Operands are individual items, and operators are individual items.
+		 */
+		function store(_expression) {
+			var expression;
+
+			// typecast the expression to a number (only if it's supposed to be a number) for checking it later
+			if(_expression !== '.' && !isOperator(_expression)) {
+				expression = +_expression;
+			} else {
+				expression = _expression;
+			}
+
+			// push any regular or decimal number as its own element into the array
+			// e.g. '9999' should be one element, and '99.99' should be one element
+			if(typeof expression === 'number' && !isOperator(equation[equation.length - 1]) || expression === '.') {
 				if(equation.length === 0) {
 					equation[0] = ''+expression;
 				} else {
 					equation[equation.length-1] += ''+expression;
 				}
+			// push all operands to the array as individual elements
+			// e.g. '+' should be one element, and '9 + 9' should be three individual elements
 			} else {
 				equation.push(''+expression);
 			}
 		}
 
+		/**
+		 *	Resets the equation array
+		 */
 		function clear() {
 			equation = [];
 		}
@@ -48,6 +70,9 @@
 			return equation;
 		}
 
+		/**
+		 *	Tests a string to see if it is an operator
+		 */
 		function isOperator(test) {
 			var bool = false;
 
@@ -61,6 +86,9 @@
 			return bool;
 		}
 
+		/**
+		 *	Makes the current operand either positive or negative
+		 */
 		function negate(callback) {
 			var last = equation[equation.length - 2],
 				success = false;
@@ -80,6 +108,8 @@
 				}
 			}
 
+			// To negate an operand, you must click the operand, and then the +/- sign.
+			// If it wasn't in that order, then the callback won't be called.
 			if(success === true) {
 				return callback();
 			}

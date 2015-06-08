@@ -30,7 +30,7 @@
 
 		function solve($el) {
 			try {
-				this.html(Calculator.solve(Calculator.equation));
+				this.html(Calculator.solve());
 				$el.data('solved', true);
 			} catch(e) {
 				this.html(error);
@@ -55,7 +55,7 @@
 				}
 
 				// store this part of the equation
-				Calculator.store(+operand);
+				Calculator.store(operand);
 
 				// display this part of the equation
 				this.html(this.html() + operand);

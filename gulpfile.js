@@ -14,6 +14,9 @@ gulp.task('sass', function() {
 });
 
 gulp.task('js', function() {
+	gulp.src('bower_components/angularjs/angular.min.js.map')
+			.pipe(gulp.dest('app/dist/js'));
+			
 	return gulp.src([
 			'bower_components/jquery/dist/jquery.min.js',
 			'bower_components/mathjs/dist/math.min.js',

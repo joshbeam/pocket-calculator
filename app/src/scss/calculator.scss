@@ -1,7 +1,4 @@
-.calculator {
-  $calculator-height: 400px;
-  $calculator-width: 300px;
-  
+.calculator {  
   background: radial-gradient(#aaa, #555);
   border-radius: 5px;
   box-shadow: 0 0 80px #bbb;
@@ -14,8 +11,9 @@
     padding: 0 10px;
     font-size: 75px;
     height: 20%;
+    overflow-x: auto;
+    overflow-y: hidden;
     text-align: right;
-    overflow-x: scroll;
   }
   
   .calculator-keypad {
@@ -27,16 +25,23 @@
     user-select: none;
     
     .key {
-      $key-color: #eee;
-      $key-operator-color: lighten(lightblue, 10%);
-      
       background: $key-color;
       flex: 1 0 auto;
       height: 20%;
       line-height: ($calculator-height * .8) / 5;
       outline: 1px solid #ddd;
       text-align: center;
+      transition: 250ms;
       width: 25%;
+
+      &:nth-child(n+1):nth-child(-n+3) {
+        background: darken($key-color, 5%);
+
+        &:focus,
+        &:active {
+          background: darken($key-color, 10%);
+        }
+      }
       
       &:nth-child(4n),
       &:last-child {
@@ -54,7 +59,7 @@
       
       &:focus,
       &:active {
-        background: darken($key-color, 2%);
+        background: darken($key-color, 4%);
       }
     }
   }
