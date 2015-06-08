@@ -9,13 +9,15 @@
 
 	function Calculator() {
 		var equation = [],
-			operators = ['+', '-', '/', '*', '%'];
+				lastSolution,
+				operators = ['+', '-', '/', '*', '%'];
 
 		var factory = {
 			solve: solve,
 			store: store,
 			clear: clear,
 			get: get,
+			getLastSolution: getLastSolution,
 			negate: negate
 		};
 
@@ -27,7 +29,12 @@
 		 *	Evaluates the equation by joining the elements in the equation array
 		 */
 		function solve() {
-			return m.eval(equation.join(''));
+			try {
+				lastSolution = m.eval(equation.join(''));
+				return lastSolution;
+			} catch(e) {
+				return e;
+			}
 		}
 
 		/**
@@ -68,6 +75,10 @@
 
 		function get() {
 			return equation;
+		}
+
+		function getLastSolution() {
+			return lastSolution;
 		}
 
 		/**

@@ -10,7 +10,7 @@
 		
 		var d = {
 			restrict: 'E',
-			templateUrl: 'templates/calculator.html',
+			templateUrl: 'calculator.html',
 			link: link
 		},
 		error = 'ERROR';
@@ -23,7 +23,7 @@
 			$el.find('[solve]').on('click', solve.bind($display, $el));
 			$el.find('[clear]').on('click', clear.bind($display));
 			$el.find('[number]').add('[point]').on('click', store.bind($display, $el));
-			$el.find('[operator]').on('click', operate.bind($display));
+			$el.find('[operator]').on('click', operate.bind($display, $el));
 		}
 
 		/////////////////////
@@ -49,7 +49,7 @@
 
 			if(this.html().length !== 6) {
 				// initially clear the display
-				if(this.html() === '0' || !!$el.data('solved') || this.html() === error) {
+				if(this.html() === '0' || $el.data('solved') === true || this.html() === error) {
 					this.html('');
 					$el.data('solved', false);
 				}
@@ -62,8 +62,13 @@
 			}
 		}
 
-		function operate(e) {
+		function operate($el, e) {
 			var operator = $(e.target).attr('operator');
+
+			if($el.data('solved') === true) {
+				Calculator.store(Calculator.getLastSolution());
+				$el.data('solved', false);
+			}
 
 			if(operator === 'negate') {
 				Calculator.negate(function negationSuccess() {

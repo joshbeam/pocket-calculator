@@ -3,6 +3,7 @@ var gulp = require('gulp'),
 	sass = require('gulp-sass'),
 	prefix = require('gulp-autoprefixer'),
 	sync = require('browser-sync'),
+	shell = require('gulp-shell'),
 	reload = sync.reload;
 
 gulp.task('sass', function() {
@@ -16,7 +17,7 @@ gulp.task('sass', function() {
 gulp.task('js', function() {
 	gulp.src('bower_components/angularjs/angular.min.js.map')
 			.pipe(gulp.dest('app/dist/js'));
-			
+
 	return gulp.src([
 			'bower_components/jquery/dist/jquery.min.js',
 			'bower_components/mathjs/dist/math.min.js',
@@ -30,11 +31,12 @@ gulp.task('js', function() {
 });
 
 gulp.task('watch', function() {
-	sync({
-		server: {
-			baseDir: 'app'
-		}
-	});
+	// sync({
+	// 	server: {
+	// 		baseDir: 'app'
+	// 	}
+	// });
+	shell.task(['node server.js'])();
 
 	gulp.watch(['app/src/scss/*'], ['sass']);
 	gulp.watch(['app/src/js/**/*'], ['js']);
