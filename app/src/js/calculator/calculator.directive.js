@@ -10,7 +10,7 @@
 		
 		var d = {
 			restrict: 'E',
-			templateUrl: 'calculator.html',
+			templateUrl: '/templates/calculator.html',
 			link: link
 		},
 		error = 'ERROR';

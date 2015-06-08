@@ -4,8 +4,8 @@ var express = require('express'),
 
 process.env.PWD = process.cwd();
 
-app.use('/public', express.static(process.env.PWD + '/app/dist'));
-app.use(express.static('./app/templates'));
+app.use('/public', express.static(process.env.PWD + '/app/dist/'));
+app.use('/templates', express.static(process.env.PWD + '/app/templates/'));
 
 app.get('/', function(req, res) {
 	res.sendFile(process.env.PWD + '/app/index.html');
