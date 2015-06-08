@@ -1,4 +1,3 @@
-// negative decimals
 ;(function(app, m) {
 
 	'use strict';
@@ -80,6 +79,7 @@
 			// push all operands to the array as individual elements
 			// e.g. '+' should be one element, and '9 + 9' should be three individual elements
 			} else {
+				// FIXME: check if the operator is the same as the previous operator
 				equation.push(''+expression);
 			}
 			
