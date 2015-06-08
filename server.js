@@ -4,7 +4,7 @@ var express = require('express'),
 
 process.env.PWD = process.cwd();
 
-app.use(express.static('./app/dist'));
+app.use('/public', express.static('./app/dist'));
 app.use(express.static('./app/templates'));
 
 app.get('/', function(req, res) {
