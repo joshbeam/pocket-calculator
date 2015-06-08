@@ -1,5 +1,7 @@
 # Pocket Calculator
 
+<a href="https://pocket-calculator.herokuapp.com">Pocket Calculator (live)</a>
+
 This example application mimicks a basic-function calculator. It uses <a href="https://angularjs.org/">AngularJS</a> for layout and <a href="http://mathjs.org/">math.js</a> for basic math functions.
 
 ## Requirements
