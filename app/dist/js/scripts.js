@@ -466,7 +466,9 @@ c){return e.$isEmpty(c)||c.length>=f}}}}};N.angular.bootstrap?console.log("WARNI
 		 */
 		function solve(onSuccess, onError) {
 			try {
-				lastSolution = m.eval(equation.join(''));
+				// parseFloat fixes native float imprecision
+				// e.g. -0.6 + 2 - 1 != 0.3999 (but JavaScript thinks it does)
+				lastSolution = parseFloat( +(m.eval(equation.join('')).toPrecision(12)) );
 				this.solved(true);
 
 				onSuccess.call(this, lastSolution);
@@ -515,9 +517,11 @@ c){return e.$isEmpty(c)||c.length>=f}}}}};N.angular.bootstrap?console.log("WARNI
 			// e.g. '+' should be one element, and '9 + 9' should be three individual elements
 			} else {
 				// FIXME: check if the operator is the same as the previous operator
-				equation.push(''+expression);
+				if(equation[equation.length - 1] !== expression) {
+					equation.push(''+expression);
+				}
 			}
-			
+
 			if(typeof callback !== 'undefined') {
 				return callback.call(this, equation);
 			}
