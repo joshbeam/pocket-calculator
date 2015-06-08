@@ -6,6 +6,12 @@
   font-size: 16px;
 }
 
+a {
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+}
+
 body,
 html {
   background: $background;
@@ -15,5 +21,16 @@ html {
 body {
   align-items: center;
   display: flex;
+  flex-flow: row wrap;
   justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+footer {
+  align-self: flex-end;
+  flex: 1 0 auto;
+  padding: 20px;
+  text-align: right;
+  width: 100%;
 }
